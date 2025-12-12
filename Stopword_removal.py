@@ -1,12 +1,29 @@
 import pandas as pd
+import nltk
+import ast  
 
-InSetp = pd.read_csv('/work/positive.csv')  # InSet Lexicon Positive
-InSetn = pd.read_csv('/work/negative.csv')  # InSet Lexicon Negative
-stopword_dict = pd.read_csv('/work/stopwords_indonesian.txt', header=None, names=['word'])  #NLTK STOPWORD
+nltk.download('punkt')
 
-all_words_set = set(InSetp['word']).union(set(InSetn['word']))
+with open('/work/stopwords_indonesian_modified.txt', 'r') as f:
+    stopwords = set(f.read().splitlines())
+df = pd.read_csv('/work/CASE 1/data_ulasan_normalisasi_final.csv')
 
-stopword_dict_filtered = stopword_dict[~stopword_dict['word'].isin(all_words_set)]
+def convert_to_list(text):
+    if isinstance(text, str):
+        try:
+            return ast.literal_eval(text)  
+        except (ValueError, SyntaxError):
+            return text.split() 
+    return text
 
-with open('stopwords_indonesian_modified.txt', 'w') as f:
-    f.write("\n".join(stopword_dict_filtered['word']))
+
+def remove_stopwords(tokens):
+    return [token for token in tokens if token not in stopwords]
+
+df['Ulasan_normalisasi_final'] = df['Ulasan_normalisasi_final'].apply(convert_to_list)
+df['Ulasan_stopword'] = df['Ulasan_normalisasi_final'].apply(remove_stopwords)
+df.to_csv('/work/CASE 1/data_ulasan_stopword.csv', index=False)
+
+
+total_ulasan = len(df)
+print(f'Total data ulasan: {total_ulasan}')
