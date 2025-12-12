@@ -121,3 +121,8 @@ The project includes:
 - Netral sentiment
   
   <img width="790" height="405" alt="sentimen netral line bank" src="https://github.com/user-attachments/assets/00d8e0c4-d6ea-42d5-88ef-26f96cb49722" />
+
+##Credits
+```bash
+https://raw.githubusercontent.com/nasalsabila/kamus-alay/master/colloquial-indonesian-lexicon.csv
+```
